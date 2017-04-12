@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "MYHorizontalProgressView.h"
 #import "UIView+CWNView.h"
 
 @interface ViewController ()
@@ -17,6 +18,8 @@
 @property (strong, nonatomic) NSLayoutConstraint *redViewTop;//红色视图距离父视图视图顶部约束
 @property (strong, nonatomic) NSLayoutConstraint *blueViewHeight;//蓝色视图高度约束
 
+@property (strong, nonatomic) MYHorizontalProgressView *progressView;//可以控制高度的进度条(基于系统控件UIProgressView)
+
 @end
 
 @implementation ViewController
@@ -25,19 +28,25 @@
     [super viewDidLoad];
     __weak typeof(self) weakSelf = self;
     [self.view addSubview:self.redView];
+    [self.view addSubview:self.progressView];
     [self.view addSubview:self.blueView];
     
     
     //新版本实现
     [_redView cwn_makeConstraints:^(UIView *maker) {
-        weakSelf.redViewTop = maker.topToSuper(20).lastConstraint;//记住需动态更新的约束
+        weakSelf.redViewTop = maker.topToSuper(10).lastConstraint;//记住需动态更新的约束
         maker.leftToSuper(20);
         maker.centerXtoSuper(0);
-        maker.bottomTo(weakSelf.blueView, 1, 20);
-//     maker.leftToSuper(20).centerXtoSuper(0).bottomTo(weakSelf.blueView, 1, 20);  链式
+        maker.bottomTo(weakSelf.progressView, 1, 10);
+//     maker.leftToSuper(20).centerXtoSuper(0).bottomTo(weakSelf.progressView, 1, 10);//链式
     }];
     
-    _redViewTop.constant = 30;//动态更新约束
+    _redViewTop.constant = 20;//动态更新约束
+    
+    
+    [self.progressView cwn_makeConstraints:^(UIView *maker) {
+        maker.leftToSuper(20).rightToSuper(20).height(10).bottomTo(weakSelf.blueView, 1, 10);
+    }];
 
     
     //旧版本实现
@@ -50,6 +59,10 @@
     }];
     
     _blueViewHeight.constant = 150;//动态更新约束
+    
+
+    
+    [self.progressView setProgress:0.5 animated:YES];
 }
 
 
@@ -61,6 +74,13 @@
         _redView.backgroundColor = [UIColor redColor];
     }
     return _redView;
+}
+
+- (MYHorizontalProgressView *)progressView{
+    if(!_progressView){
+        _progressView = [[MYHorizontalProgressView alloc] init];
+    }
+    return _progressView;
 }
 
 - (UIView *)blueView{
