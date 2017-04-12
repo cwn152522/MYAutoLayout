@@ -16,6 +16,8 @@
 
 @property (strong, nonatomic) UIProgressView *progressView;
 
+@property (assign, nonatomic) BOOL didLayout;
+
 @end
 
 @implementation MYHorizontalProgressView
@@ -45,10 +47,10 @@
 }
 
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated{
-    static BOOL didLayout = NO;
-    if(didLayout == NO){
+//    static BOOL didLayout = NO;
+    if(self.didLayout == NO){
         [self layoutIfNeeded];
-        didLayout = YES;
+        self.didLayout = YES;
         CGFloat height = CGRectGetHeight(self.frame);
         
         self.layer.cornerRadius = height / 2.0;
