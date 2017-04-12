@@ -14,7 +14,7 @@
 @property (strong, nonatomic) UIView *redView;
 @property (strong, nonatomic) UIView *blueView;
 
-@property (strong, nonatomic) NSLayoutConstraint *redViewTop;//红色视图距离俯视图视图顶部约束
+@property (strong, nonatomic) NSLayoutConstraint *redViewTop;//红色视图距离父视图视图顶部约束
 @property (strong, nonatomic) NSLayoutConstraint *blueViewHeight;//蓝色视图高度约束
 
 @end
