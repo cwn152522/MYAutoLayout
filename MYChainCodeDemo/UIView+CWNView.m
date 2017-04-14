@@ -15,7 +15,8 @@
 
 - (void)cwn_makeConstraints:(void (^)(UIView *))block{
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    block(self);
+    __weak typeof(self) weakSelf = self;
+    block(weakSelf);
 }
 
 
