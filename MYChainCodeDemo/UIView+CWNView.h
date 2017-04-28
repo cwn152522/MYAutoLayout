@@ -119,12 +119,12 @@
  */
 
 /**
- * frame相对父布局适配之父视图适配
+ * 相对父布局适配之父视图适配
  */
 - (UIView * (^)())shiPeiSelf;
 
 /**
- * frame相对父布局适配之子视图frame适配
+ * 相对父布局适配之子视图frame适配
  */
 - (UIView *(^)())shiPeiSubViews;
 
@@ -165,12 +165,12 @@
  */
 
 /**
- * frame相对父布局适配之父视图frame适配
+ * 相对父布局适配之父视图frame适配
  */
 - (void)shiPeiSelf_X_Y_W_H;
 
 /**
- * frame相对父布局适配之子视图frame适配
+ * 相对父布局适配之子视图frame适配
  */
 - (void)shiPeiSubView_X_Y_W_H;
 
