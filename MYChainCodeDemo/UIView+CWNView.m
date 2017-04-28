@@ -9,9 +9,14 @@
 #import "UIView+CWNView.h"
 #import <objc/runtime.h>
 
+#define SHIPEI(a)  [UIScreen mainScreen].bounds.size.width/375.0*a
+
+
 @implementation UIView (CWNView)
 
-#pragma mark -autolayout布局创建方法-
+#pragma mark 布局创建方法
+
+#pragma mark -autolayout布局创建方法
 
 - (void)cwn_makeConstraints:(void (^)(UIView *))block{
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -19,8 +24,18 @@
     block(weakSelf);
 }
 
+#pragma mark -frame布局适配创建方法
 
-#pragma mark -新版本链式编程方法-
+- (void)cwn_makeShiPeis:(void (^)(UIView *))block{
+    __weak typeof(self) weakSelf = self;
+    block(weakSelf);
+}
+
+
+#pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
+
+#pragma mark ----------------------------------新版本链式编程-------------------------------------
+#pragma mark ---------------------autolayout布局-----------------------------
 
 - (void)setLastConstraint:(NSLayoutConstraint *)lastConstraint{
     objc_setAssociatedObject(self, @selector(lastConstraint), lastConstraint, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -174,8 +189,28 @@
     return block;
 }
 
+#pragma mark -----------------------frame适配-----------------------------
 
-#pragma mark -旧版本方法-
+- (UIView * (^)())shiPeiSelf{
+    __weak typeof(self) weakSelf = self;
+    UIView * (^block)() = ^{
+        [weakSelf shiPeiSelf_X_Y_W_H];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)())shiPeiSubViews{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^{
+        [weakSelf shiPeiSubView_X_Y_W_H];
+        return weakSelf;
+    };
+    return block;
+}
+
+#pragma mark -------------------------------------旧版本-------------------------------------------
+#pragma mark ---------------------autolayout布局-----------------------------
 
 - (NSLayoutConstraint *)setLayoutTopFromSuperViewWithConstant:(CGFloat)c{
     NSLayoutConstraint *constraint;
@@ -320,5 +355,18 @@
     }
     return constraint;
 }
+
+#pragma mark -----------------------frame适配-----------------------------
+
+- (void)shiPeiSelf_X_Y_W_H{
+    self.frame = CGRectMake(SHIPEI(self.frame.origin.x), SHIPEI(self.frame.origin.y), SHIPEI(self.frame.size.width), SHIPEI(self.frame.size.height));
+}
+
+- (void)shiPeiSubView_X_Y_W_H{
+    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
+    }];
+}
+
 
 @end
