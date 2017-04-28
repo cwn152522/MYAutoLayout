@@ -30,7 +30,7 @@
 
 @interface UIView (CWNView)
 
-#pragma mark 获取布局操作器，在block里调用具体布局方法进行布局
+#pragma mark 布局操作器获取方法，在block里调用具体布局方法进行布局
 
 /**
  * autolayout布局操作器获取方法

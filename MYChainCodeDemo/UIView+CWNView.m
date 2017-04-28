@@ -14,9 +14,9 @@
 
 @implementation UIView (CWNView)
 
-#pragma mark 布局创建方法
+#pragma mark 布局操作器获取方法
 
-#pragma mark -autolayout布局创建方法
+#pragma mark -autolayout布局操作器获取方法
 
 - (void)cwn_makeConstraints:(void (^)(UIView *))block{
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -24,7 +24,7 @@
     block(weakSelf);
 }
 
-#pragma mark -frame布局适配创建方法
+#pragma mark -frame布局适配操作器获取方法
 
 - (void)cwn_makeShiPeis:(void (^)(UIView *))block{
     __weak typeof(self) weakSelf = self;
