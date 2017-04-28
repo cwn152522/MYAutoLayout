@@ -9,17 +9,33 @@
 #import "UIView+CWNView.h"
 #import <objc/runtime.h>
 
+#define SHIPEI(a)  [UIScreen mainScreen].bounds.size.width/375.0*a
+
+
 @implementation UIView (CWNView)
 
-#pragma mark -autolayout布局创建方法-
+#pragma mark 布局创建方法
+
+#pragma mark -autolayout布局创建方法
 
 - (void)cwn_makeConstraints:(void (^)(UIView *))block{
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    block(self);
+    __weak typeof(self) weakSelf = self;
+    block(weakSelf);
+}
+
+#pragma mark -frame布局适配创建方法
+
+- (void)cwn_makeShiPeis:(void (^)(UIView *))block{
+    __weak typeof(self) weakSelf = self;
+    block(weakSelf);
 }
 
 
-#pragma mark -新版本链式编程方法-
+#pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
+
+#pragma mark ----------------------------------新版本链式编程-------------------------------------
+#pragma mark ---------------------autolayout布局-----------------------------
 
 - (void)setLastConstraint:(NSLayoutConstraint *)lastConstraint{
     objc_setAssociatedObject(self, @selector(lastConstraint), lastConstraint, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -30,135 +46,171 @@
 }
 
 - (UIView *(^)(CGFloat))topToSuper{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-       [self setLastConstraint:[self setLayoutTopFromSuperViewWithConstant:constant]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutTopFromSuperViewWithConstant:constant]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))leftToSuper{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [self setLastConstraint:[self setLayoutLeftFromSuperViewWithConstant:constant]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutLeftFromSuperViewWithConstant:constant]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))bottomToSuper{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-       [self setLastConstraint:[self setLayoutBottomFromSuperViewWithConstant:constant]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutBottomFromSuperViewWithConstant:constant]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))rightToSuper{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [self setLastConstraint:[self setLayoutRightFromSuperViewWithConstant:constant]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutRightFromSuperViewWithConstant:constant]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat, CGFloat))topTo{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [self setLastConstraint:[self setLayoutTop:targetView multiplier:m constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutTop:targetView multiplier:m constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat, CGFloat))leftTo{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [self setLastConstraint:[self setLayoutLeft:targetView multiplier:m constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutLeft:targetView multiplier:m constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat, CGFloat))bottomTo{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [self setLastConstraint:[self setLayoutBottom:targetView multiplier:m constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutBottom:targetView multiplier:m constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat, CGFloat))rightTo{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [self setLastConstraint:[self setLayoutRight:targetView multiplier:m constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutRight:targetView multiplier:m constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))width{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [self setLastConstraint:[self setLayoutWidth:constant]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutWidth:constant]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))height{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [self setLastConstraint:[self setLayoutHeight:constant]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutHeight:constant]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat, CGFloat))widthTo{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [self setLastConstraint:[self setLayoutWidth:targetView multiplier:m constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutWidth:targetView multiplier:m constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat, CGFloat))heightTo{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [self setLastConstraint:[self setLayoutHeight:targetView multiplier:m constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutHeight:targetView multiplier:m constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))centerXtoSuper{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [self setLastConstraint:[self setLayoutCenterX:self.superview]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(CGFloat))centerYtoSuper{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [self setLastConstraint:[self setLayoutCenterY:self.superview]];
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview]];
         return self;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat))centerXto{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *,CGFloat) = ^(UIView *targetView, CGFloat c){
-        [self setLastConstraint:[self setLayoutCenterX:targetView constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:targetView constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
 - (UIView *(^)(UIView *, CGFloat))centerYto{
+    __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
-        [self setLastConstraint:[self setLayoutCenterY:targetView constant:c]];
-        return self;
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:targetView constant:c]];
+        return weakSelf;
     };
     return block;
 }
 
+#pragma mark -----------------------frame适配-----------------------------
 
-#pragma mark -旧版本方法-
+- (UIView * (^)())shiPeiSelf{
+    __weak typeof(self) weakSelf = self;
+    UIView * (^block)() = ^{
+        [weakSelf shiPeiSelf_X_Y_W_H];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)())shiPeiSubViews{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^{
+        [weakSelf shiPeiSubView_X_Y_W_H];
+        return weakSelf;
+    };
+    return block;
+}
+
+#pragma mark -------------------------------------旧版本-------------------------------------------
+#pragma mark ---------------------autolayout布局-----------------------------
 
 - (NSLayoutConstraint *)setLayoutTopFromSuperViewWithConstant:(CGFloat)c{
     NSLayoutConstraint *constraint;
@@ -303,5 +355,18 @@
     }
     return constraint;
 }
+
+#pragma mark -----------------------frame适配-----------------------------
+
+- (void)shiPeiSelf_X_Y_W_H{
+    self.frame = CGRectMake(SHIPEI(self.frame.origin.x), SHIPEI(self.frame.origin.y), SHIPEI(self.frame.size.width), SHIPEI(self.frame.size.height));
+}
+
+- (void)shiPeiSubView_X_Y_W_H{
+    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
+    }];
+}
+
 
 @end

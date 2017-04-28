@@ -14,15 +14,23 @@
  *  引入链式编程思想，进一步简化autolayout代码
  *
  *
+ *  @author 陈伟南, 17-04-28 13:58:34
+ *
+ *  新增frame布局的适配方法，目前提供相对父布局的便捷适配
+ *
+ *
  * @note  关于constant符号说明：
  *
-                (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
+ (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
  *             (2)当外界需对某个约束进行更新时(改变约束的constant)，这时候就得注意正负值了。
  *             (3)constant正负取决于参照视图和自身的位置关系，比如:a.right = b.left + constant，这个约束表示a的右边距离b的左边constant处。如果你希望a和b间关系是相离，那么constant得为负数，因为如果是正数的话a和b就相交了。
  */
 
 
+
 @interface UIView (CWNView)
+
+#pragma mark 布局创建方法
 
 /**
  * autolayout布局创建方法
@@ -31,10 +39,21 @@
  */
 - (void)cwn_makeConstraints:(void (^)(UIView *maker))block;
 
+/**
+ * frame布局适配创建方法
+ *
+ * @ param maker    待适配视图，即自身
+ */
+- (void)cwn_makeShiPeis:(void (^)(UIView *))block;
+
 
 #pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
 
-//---------------------------------------------新版本链式编程------------------------------------------------
+#pragma mark ----------------------------------新版本链式编程-------------------------------------
+#pragma mark ---------------------autolayout布局-----------------------------
+/**
+ * @note 适用于布局内控件间有特定的位置关系且所有控件大小不需适配的场景，比如顶部导航的封装(控件大小固定、中间文本居中、左按钮居左、右按钮居右)、高度固定的自定义cell布局等
+ */
 
 /**
  * 最新创建的一个约束获取方法
@@ -90,8 +109,31 @@
 - (UIView *(^)(UIView *targetView, CGFloat constant))centerXto;
 - (UIView *(^)(UIView *targetView, CGFloat constant))centerYto;
 
+#pragma mark -----------------------frame适配-----------------------------
+/**
+ * frame相对父布局适配
+ *
+ * @note 将指定view及其subview(iphone6下进行frame布局的)的frame参数均乘以适配参数(当前屏幕的宽度和iphone6的宽度比)进行适配
+ * @note 适用于布局内控件相对父控件有特定的位置关系且所有控件大小均需适配的场景，比如中间弹窗提示类情景、高度不固定的自定义cell布局等
+ * @note 建议storyboard或xib下用autolayout布局完成(按ui设计调好)后，禁用autolayout(移除所有约束)，然后代码中通过执行以下两个接口，确保所有控件的frame都适配好。
+ */
 
-//---------------------------------------------旧版本------------------------------------------------
+/**
+ * 相对父布局适配之父视图适配
+ */
+- (UIView * (^)())shiPeiSelf;
+
+/**
+ * 相对父布局适配之子视图frame适配
+ */
+- (UIView *(^)())shiPeiSubViews;
+
+
+#pragma mark -------------------------------------旧版本-------------------------------------------
+#pragma mark ---------------------autolayout布局-----------------------------
+/**
+ * @note 适用于布局内控件间有特定的位置关系且所有控件大小不需适配的场景，比如顶部导航的封装(控件大小固定、中间文本居中、左按钮居左、右按钮居右)、高度固定的自定义cell布局等
+ */
 
 - (NSLayoutConstraint *)setLayoutLeftFromSuperViewWithConstant:(CGFloat)c;
 - (NSLayoutConstraint *)setLayoutTopFromSuperViewWithConstant:(CGFloat)c;
@@ -112,5 +154,24 @@
 - (NSLayoutConstraint *)setLayoutCenterY:(UIView *)targetView;
 - (NSLayoutConstraint *)setLayoutCenterX:(UIView *)targetView constant:(CGFloat)c;
 - (NSLayoutConstraint *)setLayoutCenterY:(UIView *)targetView constant:(CGFloat)c;
+
+#pragma mark -----------------------frame适配-----------------------------
+/**
+ * frame相对父布局适配
+ *
+ * @note 将指定view及其subview(iphone6下进行frame布局的)的frame参数均乘以适配参数(当前屏幕的宽度和iphone6的宽度比)进行适配
+ * @note 适用于布局内控件相对父控件有特定的位置关系且所有控件大小均需适配的场景，比如中间弹窗提示类情景、高度不固定的自定义cell布局等
+ * @note 建议storyboard或xib下用autolayout布局完成(按ui设计调好)后，禁用autolayout(移除所有约束)，然后代码中通过执行以下两个接口，确保所有控件的frame都适配好。
+ */
+
+/**
+ * 相对父布局适配之父视图frame适配
+ */
+- (void)shiPeiSelf_X_Y_W_H;
+
+/**
+ * 相对父布局适配之子视图frame适配
+ */
+- (void)shiPeiSubView_X_Y_W_H;
 
 @end
