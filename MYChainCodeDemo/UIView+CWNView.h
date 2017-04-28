@@ -33,14 +33,14 @@
 #pragma mark 获取布局操作器，在block里调用具体布局方法进行布局
 
 /**
- * autolayout布局创建方法
+ * autolayout布局操作器获取方法
  *
  * @ param maker    待约束视图，即自身
  */
 - (void)cwn_makeConstraints:(void (^)(UIView *maker))block;
 
 /**
- * frame布局适配创建方法
+ * frame布局适配操作器获取方法
  *
  * @ param maker    待适配视图，即自身
  */
