@@ -166,7 +166,7 @@
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
         [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview]];
-        return self;
+        return weakSelf;
     };
     return block;
 }
