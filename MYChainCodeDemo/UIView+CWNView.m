@@ -13,6 +13,42 @@
 
 @implementation UIView (CWNView)
 
+#pragma mark Frame属性访问
+
+- (CGFloat)frame_x{
+    return CGRectGetMinX(self.frame);
+}
+- (CGFloat)frame_y{
+    return CGRectGetMinY(self.frame);
+}
+- (CGFloat)frame_width{
+    return CGRectGetWidth(self.frame);
+}
+- (CGFloat)frame_height{
+    return CGRectGetHeight(self.frame);
+}
+
+- (void)setFrame_x:(CGFloat)x{
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+}
+- (void)setFrame_y:(CGFloat)y{
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
+}
+- (void)setFrame_width:(CGFloat)width{
+    CGRect frame = self.frame;
+    frame.size.width = width;
+    self.frame = frame;
+}
+- (void)setFrame_height:(CGFloat)height{
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+}
+
 #pragma mark 布局操作器获取方法
 
 #pragma mark -autolayout布局操作器获取方法

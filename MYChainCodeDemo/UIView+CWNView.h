@@ -14,6 +14,7 @@
  *  引入链式编程思想，进一步简化autolayout代码
  *
  *
+ *
  *  @author 陈伟南, 17-04-28 13:58:34
  *
  *  新增frame布局的适配方法，目前提供相对父布局的便捷适配
@@ -24,11 +25,25 @@
  *             (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
  *             (2)当外界需对某个约束进行更新时(改变约束的constant)，这时候就得注意正负值了。
  *             (3)constant正负取决于参照视图和自身的位置关系，比如:a.right = b.left + constant，这个约束表示a的右边距离b的左边constant处。如果你希望a和b间关系是相离，那么constant得为负数，因为如果是正数的话a和b就相交了。
+ *
+ *
+ *
+ *  @author 陈伟南, 17-06-30 11:21:55
+ *
+ *  新增frame属性便捷设置
  */
 
 
 
 @interface UIView (CWNView)
+
+#pragma mark Frame属性访问
+
+@property (assign, nonatomic) CGFloat frame_x;//相当于frame.origin.x
+@property (assign, nonatomic) CGFloat frame_y;//相当于frame.origin.y
+@property (assign, nonatomic) CGFloat frame_width;//相当于frame.size.width
+@property (assign, nonatomic) CGFloat frame_height;//相当于frame.size.height
+
 
 #pragma mark 布局操作器获取方法，在block里调用具体布局方法进行布局
 
@@ -45,7 +60,6 @@
  * @ param maker    待适配视图，即自身
  */
 - (void)cwn_makeShiPeis:(void (^)(UIView *maker))block;
-
 
 #pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
 
@@ -124,7 +138,7 @@
 - (UIView * (^)())shiPeiSelf;
 
 /**
- * 相对父布局适配之子视图frame适配，只适配一级子视图
+ * 相对父布局适配之子视图frame适配，只适配一级
  */
 - (UIView *(^)())shiPeiSubViews;
 
