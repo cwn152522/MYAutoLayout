@@ -21,7 +21,7 @@
  *
  * @note  关于constant符号说明：
  *
- (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
+ *             (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
  *             (2)当外界需对某个约束进行更新时(改变约束的constant)，这时候就得注意正负值了。
  *             (3)constant正负取决于参照视图和自身的位置关系，比如:a.right = b.left + constant，这个约束表示a的右边距离b的左边constant处。如果你希望a和b间关系是相离，那么constant得为负数，因为如果是正数的话a和b就相交了。
  */
@@ -44,7 +44,7 @@
  *
  * @ param maker    待适配视图，即自身
  */
-- (void)cwn_makeShiPeis:(void (^)(UIView *))block;
+- (void)cwn_makeShiPeis:(void (^)(UIView *maker))block;
 
 
 #pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
@@ -128,6 +128,10 @@
  */
 - (UIView *(^)())shiPeiSubViews;
 
+/**
+ * 相对父布局适配子视图深度遍历frame适配
+ */
+- (UIView *(^)())shiPeiAllSubViews;
 
 #pragma mark -------------------------------------旧版本-------------------------------------------
 #pragma mark ---------------------autolayout布局-----------------------------
@@ -170,8 +174,13 @@
 - (void)shiPeiSelf_X_Y_W_H;
 
 /**
- * 相对父布局适配之子视图frame适配
+ * 相对父布局适配之子视图frame适配，只适配一级
  */
 - (void)shiPeiSubView_X_Y_W_H;
+
+/**
+ * 相对父布局适配所有子视图frame适配，通过递归，完成指定目标下所有子视图的适配
+ */
+- (void)shiPeiAllSubViews_X_Y_W_H;
 
 @end

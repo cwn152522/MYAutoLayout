@@ -11,7 +11,6 @@
 
 #define SHIPEI(a)  [UIScreen mainScreen].bounds.size.width/375.0*a
 
-
 @implementation UIView (CWNView)
 
 #pragma mark 布局操作器获取方法
@@ -209,6 +208,15 @@
     return block;
 }
 
+- (UIView *(^)())shiPeiAllSubViews{
+    __weak typeof(self) weakSelf = self;
+    UIView * (^block)() = ^{
+        [weakSelf shiPeiAllSubViews_X_Y_W_H];
+        return self;
+    };
+    return block;
+}
+
 #pragma mark -------------------------------------旧版本-------------------------------------------
 #pragma mark ---------------------autolayout布局-----------------------------
 
@@ -365,6 +373,19 @@
 - (void)shiPeiSubView_X_Y_W_H{
     [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
+    }];
+}
+
+- (void)shiPeiAllSubViews_X_Y_W_H{
+    [self shiPeiSubView:self];
+}
+
+- (void)shiPeiSubView:(UIView *)targetView{
+    //TODO: 递归适配所有视图
+    __weak typeof(self) weakSelf = self;
+    [targetView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
+        [weakSelf shiPeiSubView:obj];
     }];
 }
 
