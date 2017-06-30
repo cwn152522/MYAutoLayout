@@ -124,7 +124,7 @@
 - (UIView * (^)())shiPeiSelf;
 
 /**
- * 相对父布局适配之子视图frame适配
+ * 相对父布局适配之子视图frame适配，只适配一级子视图
  */
 - (UIView *(^)())shiPeiSubViews;
 
