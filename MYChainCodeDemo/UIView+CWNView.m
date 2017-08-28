@@ -191,7 +191,7 @@
 - (UIView *(^)(CGFloat))centerXtoSuper{
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview]];
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview constant:constant]];
         return weakSelf;
     };
     return block;
@@ -200,7 +200,7 @@
 - (UIView *(^)(CGFloat))centerYtoSuper{
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview]];
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview constant:constant]];
         return weakSelf;
     };
     return block;
@@ -234,6 +234,14 @@
     };
     return block;
 }
+- (UIView *(^)())shiPeiSelf_XW{
+    __weak typeof(self) weakSelf = self;
+    UIView * (^block)() = ^{
+        [weakSelf shiPeiSelf_X_W];
+        return weakSelf;
+    };
+    return block;
+}
 
 - (UIView *(^)())shiPeiSubViews{
     __weak typeof(self) weakSelf = self;
@@ -243,12 +251,27 @@
     };
     return block;
 }
+- (UIView *(^)())shiPeiSubViews_XW{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^{
+        return weakSelf;
+    };
+    return block;
+}
 
 - (UIView *(^)())shiPeiAllSubViews{
     __weak typeof(self) weakSelf = self;
     UIView * (^block)() = ^{
         [weakSelf shiPeiAllSubViews_X_Y_W_H];
-        return self;
+        return weakSelf;
+    };
+    return block;
+}
+- (UIView *(^)())shiPeiAllSubViews_XW{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^{
+        [weakSelf shiPeiAllSubViews_X_W];
+        return weakSelf;
     };
     return block;
 }
@@ -405,18 +428,37 @@
 - (void)shiPeiSelf_X_Y_W_H{
     self.frame = CGRectMake(SHIPEI(self.frame.origin.x), SHIPEI(self.frame.origin.y), SHIPEI(self.frame.size.width), SHIPEI(self.frame.size.height));
 }
+- (void)shiPeiSelf_X_W{
+    self.frame = CGRectMake(SHIPEI(self.frame.origin.x), self.frame.origin.y, SHIPEI(self.frame.size.width), self.frame.size.height);
+}
 
 - (void)shiPeiSubView_X_Y_W_H{
     [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
     }];
 }
+- (void)shiPeiSubView_X_W{
+    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), obj.frame.origin.y, SHIPEI(obj.frame.size.width),obj.frame.size.height);
+    }];
+}
 
 - (void)shiPeiAllSubViews_X_Y_W_H{
     [self shiPeiSubView:self];
 }
+- (void)shiPeiAllSubViews_X_W{
+    [self shiPeiSubView_X_W:self];
+}
 
 - (void)shiPeiSubView:(UIView *)targetView{
+    //TODO: 递归适配所有视图
+    __weak typeof(self) weakSelf = self;
+    [targetView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
+        [weakSelf shiPeiSubView:obj];
+    }];
+}
+- (void)shiPeiSubView_X_W:(UIView *)targetView{
     //TODO: 递归适配所有视图
     __weak typeof(self) weakSelf = self;
     [targetView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

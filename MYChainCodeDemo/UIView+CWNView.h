@@ -136,16 +136,19 @@
  * 相对父布局适配之父视图适配
  */
 - (UIView * (^)())shiPeiSelf;
+- (UIView *(^)())shiPeiSelf_XW;
 
 /**
  * 相对父布局适配之子视图frame适配，只适配一级
  */
 - (UIView *(^)())shiPeiSubViews;
+- (UIView *(^)())shiPeiSubViews_XW;
 
 /**
  * 相对父布局适配子视图深度遍历frame适配
  */
 - (UIView *(^)())shiPeiAllSubViews;
+- (UIView *(^)())shiPeiAllSubViews_XW;
 
 #pragma mark -------------------------------------旧版本-------------------------------------------
 #pragma mark ---------------------autolayout布局-----------------------------
@@ -186,15 +189,18 @@
  * 相对父布局适配之父视图frame适配
  */
 - (void)shiPeiSelf_X_Y_W_H;
+- (void)shiPeiSelf_X_W;
 
 /**
  * 相对父布局适配之子视图frame适配，只适配一级
  */
 - (void)shiPeiSubView_X_Y_W_H;
+- (void)shiPeiSubView_X_W;
 
 /**
  * 相对父布局适配所有子视图frame适配，通过递归，完成指定目标下所有子视图的适配
  */
 - (void)shiPeiAllSubViews_X_Y_W_H;
+- (void)shiPeiAllSubViews_X_W;
 
 @end
