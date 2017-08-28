@@ -462,7 +462,7 @@
     //TODO: 递归适配所有视图
     __weak typeof(self) weakSelf = self;
     [targetView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
+        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), obj.frame.origin.y, SHIPEI(obj.frame.size.width), obj.frame.size.height);
         [weakSelf shiPeiSubView:obj];
     }];
 }
