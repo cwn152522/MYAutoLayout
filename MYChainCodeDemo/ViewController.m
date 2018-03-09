@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) UIView *redView;
 @property (strong, nonatomic) UIView *blueView;
+@property (weak, nonatomic) IBOutlet UIView *centerView;
 
 @property (strong, nonatomic) NSLayoutConstraint *redViewTop;//红色视图距离父视图视图顶部约束
 @property (strong, nonatomic) NSLayoutConstraint *blueViewHeight;//蓝色视图高度约束
@@ -27,9 +28,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) weakSelf = self;
-    [self.view addSubview:self.redView];
-    [self.view addSubview:self.progressView];
-    [self.view addSubview:self.blueView];
+    [self.view insertSubview:self.redView atIndex:0];
+    [self.view insertSubview:self.progressView atIndex:0];
+    [self.view insertSubview:self.blueView atIndex:0];
     
     
     //新版本实现
@@ -63,6 +64,13 @@
 
     
     [self.progressView setProgress:0.5 animated:YES];
+    
+    
+    
+    //frame快速适配
+    [self.centerView cwn_makeShiPeis:^(UIView *maker) {
+        maker.shiPeiSelf().shiPeiAllSubViews();
+    }];
 }
 
 
