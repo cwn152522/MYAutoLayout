@@ -100,6 +100,9 @@
     }];
     return constraint;
 }
+- (void)setWidthConstraint:(NSLayoutConstraint *)widthConstraint{
+    objc_setAssociatedObject(self, @selector(widthConstraint), widthConstraint, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 //高度约束
 - (NSLayoutConstraint *)heightConstraint{
@@ -111,6 +114,9 @@
         }
     }];
     return constraint;
+}
+- (void)setHeightConstraint:(NSLayoutConstraint *)heightConstraint{
+    objc_setAssociatedObject(self, @selector(heightConstraint), heightConstraint, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIView *(^)(CGFloat))topToSuper{
