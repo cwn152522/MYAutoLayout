@@ -11,16 +11,8 @@
 #import "UIView+CWNView.h"
 
 @interface ViewController ()
-
-@property (strong, nonatomic) UIView *redView;
-@property (strong, nonatomic) UIView *blueView;
 @property (weak, nonatomic) IBOutlet UIView *centerView;
-
-@property (strong, nonatomic) NSLayoutConstraint *redViewTop;//红色视图距离父视图视图顶部约束
-@property (strong, nonatomic) NSLayoutConstraint *blueViewHeight;//蓝色视图高度约束
-
-@property (strong, nonatomic) MYHorizontalProgressView *progressView;//可以控制高度的进度条(基于系统控件UIProgressView)
-
+@property (weak, nonatomic) IBOutlet UIButton *centerbtn;
 @end
 
 @implementation ViewController
@@ -28,75 +20,42 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) weakSelf = self;
-    [self.view insertSubview:self.redView atIndex:0];
-    [self.view insertSubview:self.progressView atIndex:0];
-    [self.view insertSubview:self.blueView atIndex:0];
     
-    
-    //新版本实现
-    [_redView cwn_makeConstraints:^(UIView *maker) {
-        weakSelf.redViewTop = maker.topToSuper(10).lastConstraint;//记住需动态更新的约束
-        maker.leftToSuper(20);
-        maker.centerXtoSuper(0);
-        maker.bottomTo(weakSelf.progressView, 1, 10);
-//     maker.leftToSuper(20).centerXtoSuper(0).bottomTo(weakSelf.progressView, 1, 10);//链式
+    //定位xib中的宽度、高度约束
+    self.centerView.widthConstraint.constant = 300;
+    self.centerView.heightConstraint.constant = 300;
+    [UIView animateWithDuration:3 animations:^{
+        [weakSelf.centerView.superview layoutIfNeeded];
     }];
     
-    _redViewTop.constant = 20;//动态更新约束
-    
-    
-    [self.progressView cwn_makeConstraints:^(UIView *maker) {
-        maker.leftToSuper(20).rightToSuper(20).height(10).bottomTo(weakSelf.blueView, 1, 10);
+    //重新做xib中的控件约束
+    [self.centerbtn cwn_reMakeConstraints:^(UIView *maker) {
+        maker.centerXtoSuper(0).topToSuper(5);
     }];
-
-    
-    //旧版本实现
-    [_blueView cwn_makeConstraints:^(UIView *maker) {
-        [maker setLayoutLeftFromSuperViewWithConstant:20];
-        [maker setLayoutRightFromSuperViewWithConstant:20];
-        [maker setLayoutBottomFromSuperViewWithConstant:20];
-        weakSelf.blueViewHeight = [maker setLayoutHeight:200];//记住需动态更新的约束
-//    maker.leftToSuper(20).rightToSuper(20).bottomToSuper(20).height(200);  链式
-    }];
-    
-    _blueViewHeight.constant = 150;//动态更新约束
-    
-
-    
-    [self.progressView setProgress:0.5 animated:YES];
+    NSLog(@"本来中心对齐的，变成距顶部5");
     
     
+    //适配
+    //全部适配
+//    NSLog(@"全部适配前width：%f height:%f", self.centerView.widthConstraint.constant, self.centerView.heightConstraint.constant);
+//    [self.centerView cwn_makeShiPeis:^(UIView *maker) {
+//        maker.shipeiAllSubViewsUsinglayout();
+//    }];
+//    NSLog(@"全部适配后width：%f height:%f", self.centerView.widthConstraint.constant, self.centerView.heightConstraint.constant);
     
-    //frame快速适配
+    //水平适配
+//    NSLog(@"水平适配前width：%f height:%f", self.centerView.widthConstraint.constant, self.centerView.heightConstraint.constant);
+//    [self.centerView cwn_makeShiPeis:^(UIView *maker) {
+//        maker.shiPeiAllSubViews_X_W_UsingLayout();
+//    }];
+//    NSLog(@"水平适配后width：%f height:%f", self.centerView.widthConstraint.constant, self.centerView.heightConstraint.constant);
+    
+    //竖直方向适配
+    NSLog(@"竖直适配前width：%f height:%f", self.centerView.widthConstraint.constant, self.centerView.heightConstraint.constant);
     [self.centerView cwn_makeShiPeis:^(UIView *maker) {
-        maker.shiPeiSelf().shiPeiAllSubViews();
+        maker.shiPeiAllSubViews_Y_H_UsingLayout();
     }];
-}
-
-
-#pragma mark 控件get方法
-
-- (UIView *)redView{
-    if(!_redView){
-        _redView = [[UIView alloc] init];
-        _redView.backgroundColor = [UIColor redColor];
-    }
-    return _redView;
-}
-
-- (MYHorizontalProgressView *)progressView{
-    if(!_progressView){
-        _progressView = [[MYHorizontalProgressView alloc] init];
-    }
-    return _progressView;
-}
-
-- (UIView *)blueView{
-    if(!_blueView){
-        _blueView = [[UIView alloc] init];
-        _blueView.backgroundColor = [UIColor blueColor];
-    }
-    return _blueView;
+    NSLog(@"竖直适配后width：%f height:%f", self.centerView.widthConstraint.constant, self.centerView.heightConstraint.constant);
 }
 
 @end

@@ -13,13 +13,6 @@
  *
  *  引入链式编程思想，进一步简化autolayout代码
  *
- *
- *
- *  @author 陈伟南, 17-04-28 13:58:34
- *
- *  新增frame布局的适配方法，目前提供相对父布局的便捷适配
- *
- *
  * @note  关于constant符号说明：
  *
  *             (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
@@ -28,9 +21,34 @@
  *
  *
  *
+ *
+ *  @author 陈伟南, 17-04-28 13:58:34
+ *
+ *  新增frame布局的适配方法，目前提供相对父布局的便捷适配
+ *
+ *
+ *
+ *
  *  @author 陈伟南, 17-06-30 11:21:55
  *
  *  新增frame属性便捷设置
+ *
+ *
+ *
+ *
+ *  @author 陈伟南, 17-12-14 11:21:55
+ *
+ *  不再提供普通方法进行约束布局、适配，，，，约束布局、适配统一采用链式方法
+ *
+ *
+ *
+ *
+ *  @author 陈伟南, 18-03-09 10:50:32
+ *
+ *  1.支持相对对齐约束leftToLeft、rightToRight等的设置
+ *  2.支持约束重建，使用cwn_reMakeConstraints获取操作器即可
+ *  3.支持全部约束适配、水平、竖直方向约束单独适配
+ *  4.支持控件width、height约束的快速获取，可以定位xib中的对应约束，进行修改
  */
 
 
@@ -53,6 +71,7 @@
  * @ param maker    待约束视图，即自身
  */
 - (void)cwn_makeConstraints:(void (^)(UIView *maker))block;
+- (void)cwn_reMakeConstraints:(void (^)(UIView *maker))block;
 
 /**
  * frame布局适配操作器获取方法
@@ -61,10 +80,8 @@
  */
 - (void)cwn_makeShiPeis:(void (^)(UIView *maker))block;
 
-#pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
 
-#pragma mark ----------------------------------新版本链式编程-------------------------------------
-#pragma mark ---------------------autolayout布局-----------------------------
+#pragma mark ----------------------------------autolayout布局-------------------------------------
 /**
  * @note 适用于布局内控件间有特定的位置关系且所有控件大小不需适配的场景，比如顶部导航的封装(控件大小固定、中间文本居中、左按钮居左、右按钮居右)、高度固定的自定义cell布局等
  */
@@ -76,6 +93,15 @@
  * @note 用途：动态更新，需先定义变量进行存储
  */
 @property (strong, nonatomic) NSLayoutConstraint *lastConstraint;
+/**
+ * 控件的宽度约束(可能是xib或代码创建的)
+ */
+@property (strong, nonatomic) NSLayoutConstraint *widthConstraint;
+/**
+ * 控件的高度约束(可能是xib或代码创建的)
+ */
+@property (strong, nonatomic) NSLayoutConstraint *heightConstraint;
+
 
 /**
  *  控件相对父视图约束设置方法
@@ -96,9 +122,13 @@
  * @ note   setLayoutLeft:方法相对的是参照视图的Right，其他方法同理
  */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topTo;
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topToTop;
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))leftTo;
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))leftToLeft;
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))rightTo;
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))rightToRight;
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))bottomTo;
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))bottomToBottom;
 
 /**
  *  控件宽高的约束设置方法
@@ -123,7 +153,18 @@
 - (UIView *(^)(UIView *targetView, CGFloat constant))centerXto;
 - (UIView *(^)(UIView *targetView, CGFloat constant))centerYto;
 
-#pragma mark -----------------------frame适配-----------------------------
+
+
+
+
+#pragma mark ----------------------------------autolayout适配-------------------------------------
+
+- (UIView *(^)())shipeiAllSubViewsUsinglayout;//全部适配
+- (UIView *(^)())shiPeiAllSubViews_X_W_UsingLayout;//适配水平约束
+- (UIView *(^)())shiPeiAllSubViews_Y_H_UsingLayout;//适配竖直约束
+
+
+#pragma mark ----------------------------------frame适配-------------------------------------
 /**
  * frame相对父布局适配
  *
@@ -139,68 +180,9 @@
 - (UIView *(^)())shiPeiSelf_XW;
 
 /**
- * 相对父布局适配之子视图frame适配，只适配一级
- */
-- (UIView *(^)())shiPeiSubViews;
-- (UIView *(^)())shiPeiSubViews_XW;
-
-/**
  * 相对父布局适配子视图深度遍历frame适配
  */
 - (UIView *(^)())shiPeiAllSubViews;
 - (UIView *(^)())shiPeiAllSubViews_XW;
-
-#pragma mark -------------------------------------旧版本-------------------------------------------
-#pragma mark ---------------------autolayout布局-----------------------------
-/**
- * @note 适用于布局内控件间有特定的位置关系且所有控件大小不需适配的场景，比如顶部导航的封装(控件大小固定、中间文本居中、左按钮居左、右按钮居右)、高度固定的自定义cell布局等
- */
-
-- (NSLayoutConstraint *)setLayoutLeftFromSuperViewWithConstant:(CGFloat)c;
-- (NSLayoutConstraint *)setLayoutTopFromSuperViewWithConstant:(CGFloat)c;
-- (NSLayoutConstraint *)setLayoutRightFromSuperViewWithConstant:(CGFloat)neg_c;
-- (NSLayoutConstraint *)setLayoutBottomFromSuperViewWithConstant:(CGFloat)neg_c;
-
-- (NSLayoutConstraint *)setLayoutLeft:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c;
-- (NSLayoutConstraint *)setLayoutTop:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c;
-- (NSLayoutConstraint *)setLayoutRight:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)neg_c;
-- (NSLayoutConstraint *)setLayoutBottom:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)neg_c;
-
-- (NSLayoutConstraint *)setLayoutWidth:(CGFloat)width;
-- (NSLayoutConstraint *)setLayoutHeight:(CGFloat)height;
-- (NSLayoutConstraint *)setLayoutWidth:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c;
-- (NSLayoutConstraint *)setLayoutHeight:(UIView *)targetView  multiplier:(CGFloat)multiplier constant:(CGFloat)c;
-
-- (NSLayoutConstraint *)setLayoutCenterX:(UIView *)targetView;
-- (NSLayoutConstraint *)setLayoutCenterY:(UIView *)targetView;
-- (NSLayoutConstraint *)setLayoutCenterX:(UIView *)targetView constant:(CGFloat)c;
-- (NSLayoutConstraint *)setLayoutCenterY:(UIView *)targetView constant:(CGFloat)c;
-
-#pragma mark -----------------------frame适配-----------------------------
-/**
- * frame相对父布局适配
- *
- * @note 将指定view及其subview(iphone6下进行frame布局的)的frame参数均乘以适配参数(当前屏幕的宽度和iphone6的宽度比)进行适配
- * @note 适用于布局内控件相对父控件有特定的位置关系且所有控件大小均需适配的场景，比如中间弹窗提示类情景、高度不固定的自定义cell布局等
- * @note 建议storyboard或xib下用autolayout布局完成(按ui设计调好)后，禁用autolayout(移除所有约束)，然后代码中通过执行以下两个接口，确保所有控件的frame都适配好。
- */
-
-/**
- * 相对父布局适配之父视图frame适配
- */
-- (void)shiPeiSelf_X_Y_W_H;
-- (void)shiPeiSelf_X_W;
-
-/**
- * 相对父布局适配之子视图frame适配，只适配一级
- */
-- (void)shiPeiSubView_X_Y_W_H;
-- (void)shiPeiSubView_X_W;
-
-/**
- * 相对父布局适配所有子视图frame适配，通过递归，完成指定目标下所有子视图的适配
- */
-- (void)shiPeiAllSubViews_X_Y_W_H;
-- (void)shiPeiAllSubViews_X_W;
 
 @end

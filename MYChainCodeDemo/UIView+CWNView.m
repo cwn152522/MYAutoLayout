@@ -59,6 +59,17 @@
     block(weakSelf);
 }
 
+- (void)cwn_reMakeConstraints:(void (^)(UIView *))block{
+    [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+    __weak typeof(self) weakSelf = self;
+    UIView *superview = self.superview;
+    if(superview){
+        [self removeFromSuperview];
+        [superview addSubview:self];
+    }
+    block(weakSelf);
+}
+
 #pragma mark -frame布局适配操作器获取方法
 
 - (void)cwn_makeShiPeis:(void (^)(UIView *))block{
@@ -67,16 +78,38 @@
 }
 
 
-#pragma mark 具体约束设置方法(分新旧两套)，根据个人喜好，自行选择
 
-#pragma mark ----------------------------------新版本链式编程-------------------------------------
-#pragma mark ---------------------autolayout布局-----------------------------
-
+#pragma mark - <********************************* autolayout布局 **********************************>
+//maker操作器最近操作的一个约束
 - (void)setLastConstraint:(NSLayoutConstraint *)lastConstraint{
     objc_setAssociatedObject(self, @selector(lastConstraint), lastConstraint, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (NSLayoutConstraint *)lastConstraint{
     NSLayoutConstraint *constraint = objc_getAssociatedObject(self, _cmd);
+    return constraint;
+}
+
+//宽度约束
+- (NSLayoutConstraint *)widthConstraint{
+    __block NSLayoutConstraint *constraint = nil;
+    [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.firstAttribute == NSLayoutAttributeWidth && obj.secondItem == nil){
+            constraint = obj;
+            *stop = YES;
+        }
+    }];
+    return constraint;
+}
+
+//高度约束
+- (NSLayoutConstraint *)heightConstraint{
+    __block NSLayoutConstraint *constraint = nil;
+    [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.firstAttribute == NSLayoutAttributeHeight && obj.secondItem == nil){
+            constraint = obj;
+            *stop = YES;
+        }
+    }];
     return constraint;
 }
 
@@ -125,10 +158,28 @@
     return block;
 }
 
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topToTop{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)(UIView *targetView, CGFloat multiplier, CGFloat constant) = ^(UIView *targetView, CGFloat multiplier, CGFloat constant){
+        [weakSelf setLastConstraint:[weakSelf setLayoutTopToTop:targetView multiplier:multiplier constant:constant]];
+        return weakSelf;
+    };
+    return block;
+}
+
 - (UIView *(^)(UIView *, CGFloat, CGFloat))leftTo{
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
         [weakSelf setLastConstraint:[weakSelf setLayoutLeft:targetView multiplier:m constant:c]];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)(UIView *, CGFloat, CGFloat))leftToLeft{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutLeftToLeft:targetView multiplier:m constant:c]];
         return weakSelf;
     };
     return block;
@@ -143,10 +194,28 @@
     return block;
 }
 
+- (UIView *(^)(UIView *, CGFloat, CGFloat))bottomToBottom{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutBottomToBottom:targetView multiplier:m constant:c]];
+        return weakSelf;
+    };
+    return block;
+}
+
 - (UIView *(^)(UIView *, CGFloat, CGFloat))rightTo{
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
         [weakSelf setLastConstraint:[weakSelf setLayoutRight:targetView multiplier:m constant:c]];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)(UIView *, CGFloat, CGFloat))rightToRight{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutRightToRight:targetView multiplier:m constant:c]];
         return weakSelf;
     };
     return block;
@@ -224,7 +293,38 @@
     return block;
 }
 
-#pragma mark -----------------------frame适配-----------------------------
+#pragma mark - <********************************* autolayout适配 **********************************>
+
+- (UIView *(^)())shipeiAllSubViewsUsinglayout{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^{
+        [weakSelf shiPeiAllSubViewsUsingLayout];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)())shiPeiAllSubViews_X_W_UsingLayout{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^{
+        [weakSelf shiPeiAllSubView_X_W_UsingLayout];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)())shiPeiAllSubViews_Y_H_UsingLayout{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)() = ^(){
+        [weakSelf shiPeiAllSubView_Y_H_UsingLayout];
+        return weakSelf;
+    };
+    return block;
+}
+
+
+
+#pragma mark - <********************************* frame适配 **********************************>
 
 - (UIView * (^)())shiPeiSelf{
     __weak typeof(self) weakSelf = self;
@@ -238,22 +338,6 @@
     __weak typeof(self) weakSelf = self;
     UIView * (^block)() = ^{
         [weakSelf shiPeiSelf_X_W];
-        return weakSelf;
-    };
-    return block;
-}
-
-- (UIView *(^)())shiPeiSubViews{
-    __weak typeof(self) weakSelf = self;
-    UIView *(^block)() = ^{
-        [weakSelf shiPeiSubView_X_Y_W_H];
-        return weakSelf;
-    };
-    return block;
-}
-- (UIView *(^)())shiPeiSubViews_XW{
-    __weak typeof(self) weakSelf = self;
-    UIView *(^block)() = ^{
         return weakSelf;
     };
     return block;
@@ -276,8 +360,18 @@
     return block;
 }
 
-#pragma mark -------------------------------------旧版本-------------------------------------------
-#pragma mark ---------------------autolayout布局-----------------------------
+
+
+
+
+
+
+
+
+
+
+#pragma mark - <********************************* 具体实现 **********************************>
+#pragma mark -------------------------------------autolayout具体布局方法-------------------------------------------
 
 - (NSLayoutConstraint *)setLayoutTopFromSuperViewWithConstant:(CGFloat)c{
     NSLayoutConstraint *constraint;
@@ -324,10 +418,46 @@
     return constraint;
 }
 
+- (NSLayoutConstraint *)setLayoutTopToTop:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c{
+    NSLayoutConstraint *constraint;
+    if (self.superview != nil) {
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeTop multiplier:multiplier constant:c];
+        [self.superview addConstraint:constraint];
+    }
+    return constraint;
+}
+
 - (NSLayoutConstraint *)setLayoutLeft:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c{
     NSLayoutConstraint *constraint;
     if (self.superview != nil) {
         constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeRight multiplier:multiplier constant:c];
+        [self.superview addConstraint:constraint];
+    }
+    return constraint;
+}
+
+- (NSLayoutConstraint *)setLayoutLeftToLeft:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c{
+    NSLayoutConstraint *constraint;
+    if (self.superview != nil) {
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeLeft multiplier:multiplier constant:c];
+        [self.superview addConstraint:constraint];
+    }
+    return constraint;
+}
+
+- (NSLayoutConstraint *)setLayoutRight:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)neg_c{
+    NSLayoutConstraint *constraint;
+    if (self.superview != nil) {
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeLeft multiplier:multiplier constant:-neg_c];
+        [self.superview addConstraint:constraint];
+    }
+    return constraint;
+}
+
+- (NSLayoutConstraint *)setLayoutRightToRight:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c{
+    NSLayoutConstraint *constraint;
+    if (self.superview != nil) {
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeRight multiplier:multiplier constant:c];
         [self.superview addConstraint:constraint];
     }
     return constraint;
@@ -342,10 +472,10 @@
     return constraint;
 }
 
-- (NSLayoutConstraint *)setLayoutRight:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)neg_c{
+- (NSLayoutConstraint *)setLayoutBottomToBottom:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)neg_c{
     NSLayoutConstraint *constraint;
     if (self.superview != nil) {
-        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeLeft multiplier:multiplier constant:-neg_c];
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeBottom multiplier:multiplier constant:-neg_c];
         [self.superview addConstraint:constraint];
     }
     return constraint;
@@ -423,7 +553,57 @@
     return constraint;
 }
 
-#pragma mark -----------------------frame适配-----------------------------
+#pragma mark -------------------------------------autolayout具体适配方法-------------------------------------------
+
+- (void)shiPeiAllSubViewsUsingLayout{//全部适配(自己的宽高约束、和其他控件间的约束)
+    [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.constant = SHIPEI(obj.constant);
+    }];
+    
+    [self shiPeiSubViewUsingLayout:self];
+}
+- (void)shiPeiSubViewUsingLayout:(UIView *)targetView{
+    //TODO: 递归适配所有视图xywh
+    [[targetView subviews] enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj shiPeiAllSubViewsUsingLayout];
+    }];
+}
+
+- (void)shiPeiAllSubView_X_W_UsingLayout{//水平适配
+    [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.firstItem == self)
+        if((obj.firstAttribute == NSLayoutAttributeLeft) || obj.firstAttribute == NSLayoutAttributeRight || obj.firstAttribute == NSLayoutAttributeLeading || obj.firstAttribute == NSLayoutAttributeTrailing || obj.firstAttribute == NSLayoutAttributeWidth || obj.firstAttribute == NSLayoutAttributeCenterX){
+            obj.constant = SHIPEI(obj.constant);
+        }
+    }];
+    
+    [self shiPeiAllSubViews_X_W_UsingLayout:self];
+}
+- (void)shiPeiAllSubViews_X_W_UsingLayout:(UIView *)targetView{
+    //TODO: 递归适配所有视图xw
+    [[targetView subviews] enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj shiPeiAllSubView_X_W_UsingLayout];
+    }];
+}
+
+- (void)shiPeiAllSubView_Y_H_UsingLayout{//竖直适配
+    [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.firstAttribute == NSLayoutAttributeTop || obj.firstAttribute == NSLayoutAttributeBottom || obj.firstAttribute == NSLayoutAttributeHeight || obj.firstAttribute == NSLayoutAttributeCenterY){
+            obj.constant = SHIPEI(obj.constant);
+        }
+    }];
+    
+    [self shiPeiAllSubViews_Y_H_UsingLayout:self];
+}
+- (void)shiPeiAllSubViews_Y_H_UsingLayout:(UIView *)targetView{
+    //TODO: 递归适配所有视图yh
+    [[targetView subviews] enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj shiPeiAllSubView_Y_H_UsingLayout];
+    }];
+}
+
+
+#pragma mark -------------------------------------frame具体适配方法-------------------------------------------
 
 - (void)shiPeiSelf_X_Y_W_H{
     self.frame = CGRectMake(SHIPEI(self.frame.origin.x), SHIPEI(self.frame.origin.y), SHIPEI(self.frame.size.width), SHIPEI(self.frame.size.height));
@@ -432,40 +612,30 @@
     self.frame = CGRectMake(SHIPEI(self.frame.origin.x), self.frame.origin.y, SHIPEI(self.frame.size.width), self.frame.size.height);
 }
 
-- (void)shiPeiSubView_X_Y_W_H{
-    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
-    }];
-}
-- (void)shiPeiSubView_X_W{
-    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), obj.frame.origin.y, SHIPEI(obj.frame.size.width),obj.frame.size.height);
-    }];
-}
-
 - (void)shiPeiAllSubViews_X_Y_W_H{
     [self shiPeiSubView:self];
 }
+
 - (void)shiPeiAllSubViews_X_W{
     [self shiPeiSubView_X_W:self];
 }
 
+
 - (void)shiPeiSubView:(UIView *)targetView{
-    //TODO: 递归适配所有视图
+    //TODO: 递归适配所有视图xywh
     __weak typeof(self) weakSelf = self;
     [targetView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), SHIPEI(obj.frame.origin.y), SHIPEI(obj.frame.size.width), SHIPEI(obj.frame.size.height));
         [weakSelf shiPeiSubView:obj];
     }];
 }
+
 - (void)shiPeiSubView_X_W:(UIView *)targetView{
-    //TODO: 递归适配所有视图
+    //TODO: 递归适配所有视图xw
     __weak typeof(self) weakSelf = self;
     [targetView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.frame = CGRectMake(SHIPEI(obj.frame.origin.x), obj.frame.origin.y, SHIPEI(obj.frame.size.width), obj.frame.size.height);
-        [weakSelf shiPeiSubView:obj];
+        [weakSelf shiPeiSubView_X_W:obj];
     }];
 }
-
-
 @end
