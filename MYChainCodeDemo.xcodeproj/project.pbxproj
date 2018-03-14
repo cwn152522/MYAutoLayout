@@ -15,8 +15,8 @@
 		BE431EB81E9C64D6002A688A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE431EB61E9C64D6002A688A /* LaunchScreen.storyboard */; };
 		BE431EC31E9C64D6002A688A /* MYChainCodeDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE431EC21E9C64D6002A688A /* MYChainCodeDemoTests.m */; };
 		BE431ECE1E9C64D6002A688A /* MYChainCodeDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE431ECD1E9C64D6002A688A /* MYChainCodeDemoUITests.m */; };
-		BE431EE61E9CB80C002A688A /* UIView+CWNView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE431EE51E9CB80C002A688A /* UIView+CWNView.m */; };
 		BE6F63391E9E0D7800A9182E /* MYHorizontalProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6F63381E9E0D7800A9182E /* MYHorizontalProgressView.m */; };
+		BE7395742058E92A00D42B5C /* UIView+CWNView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7395732058E92A00D42B5C /* UIView+CWNView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,10 +53,10 @@
 		BE431EC91E9C64D6002A688A /* MYChainCodeDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MYChainCodeDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE431ECD1E9C64D6002A688A /* MYChainCodeDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MYChainCodeDemoUITests.m; sourceTree = "<group>"; };
 		BE431ECF1E9C64D6002A688A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BE431EE41E9CB80C002A688A /* UIView+CWNView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CWNView.h"; sourceTree = "<group>"; };
-		BE431EE51E9CB80C002A688A /* UIView+CWNView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CWNView.m"; sourceTree = "<group>"; };
 		BE6F63371E9E0D7800A9182E /* MYHorizontalProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MYHorizontalProgressView.h; sourceTree = "<group>"; };
 		BE6F63381E9E0D7800A9182E /* MYHorizontalProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MYHorizontalProgressView.m; sourceTree = "<group>"; };
+		BE7395722058E92A00D42B5C /* UIView+CWNView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CWNView.h"; sourceTree = "<group>"; };
+		BE7395732058E92A00D42B5C /* UIView+CWNView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CWNView.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,10 +107,9 @@
 		BE431EA71E9C64D6002A688A /* MYChainCodeDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BE7395712058E92A00D42B5C /* Classes */,
 				BE6F63371E9E0D7800A9182E /* MYHorizontalProgressView.h */,
 				BE6F63381E9E0D7800A9182E /* MYHorizontalProgressView.m */,
-				BE431EE41E9CB80C002A688A /* UIView+CWNView.h */,
-				BE431EE51E9CB80C002A688A /* UIView+CWNView.m */,
 				BE431EAB1E9C64D6002A688A /* AppDelegate.h */,
 				BE431EAC1E9C64D6002A688A /* AppDelegate.m */,
 				BE431EAE1E9C64D6002A688A /* ViewController.h */,
@@ -149,6 +148,15 @@
 			);
 			path = MYChainCodeDemoUITests;
 			sourceTree = "<group>";
+		};
+		BE7395712058E92A00D42B5C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				BE7395722058E92A00D42B5C /* UIView+CWNView.h */,
+				BE7395732058E92A00D42B5C /* UIView+CWNView.m */,
+			);
+			path = Classes;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -287,9 +295,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE431EB01E9C64D6002A688A /* ViewController.m in Sources */,
+				BE7395742058E92A00D42B5C /* UIView+CWNView.m in Sources */,
 				BE6F63391E9E0D7800A9182E /* MYHorizontalProgressView.m in Sources */,
 				BE431EAD1E9C64D6002A688A /* AppDelegate.m in Sources */,
-				BE431EE61E9CB80C002A688A /* UIView+CWNView.m in Sources */,
 				BE431EAA1E9C64D6002A688A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
