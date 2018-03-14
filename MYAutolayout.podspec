@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MYAutolayout"
-  s.version      = "release1.0"
+  s.version      = "1.0.0"
   s.summary      = "使用链式编程思想进行封装的自动布局库MYAutolayout."
 
   # This description is used to generate tags and improve search results.
