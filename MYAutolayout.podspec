@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 
-  s.name         = "MYAutolayout"
+  s.name         = "MYAutoLayout"
   s.version      = "1.0.0"
   s.summary      = "使用链式编程思想进行封装的自动布局库MYAutolayout."
   s.homepage     = "https://github.com/cwn152522/MYAutoLayout"
