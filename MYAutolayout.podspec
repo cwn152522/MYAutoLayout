@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
   s.author             = { "陈伟南" => "1014949353@qq.com" }
   s.platform     = :ios
   s.platform     = :ios, "5.0"
-  s.source       = { :git => "git@github.com:cwn152522/MYAutoLayout.git", :tag => "#{s.version}" }
+  s.source       = { :git => "git@github.com:cwn152522/MYAutoLayout.git", :tag => "s.version" }
   s.source_files  = "Classes", "MYAutoLayout/Classes/*.{h,m}"
-  s.frameworks  = ‘UIKit’
+  s.frameworks  = "UIKit"
 
 end
