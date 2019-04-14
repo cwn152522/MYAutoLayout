@@ -13,40 +13,24 @@
 
 @implementation UIView (CWNView)
 
-#pragma mark Frame属性访问
-
-- (CGFloat)frame_x{
-    return CGRectGetMinX(self.frame);
+- (void)setCornerRadius:(CGFloat)cornerRadius{
+    objc_setAssociatedObject(self, @selector(cornerRadius), @(cornerRadius), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    //设置圆角
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = cornerRadius;
 }
-- (CGFloat)frame_y{
-    return CGRectGetMinY(self.frame);
-}
-- (CGFloat)frame_width{
-    return CGRectGetWidth(self.frame);
-}
-- (CGFloat)frame_height{
-    return CGRectGetHeight(self.frame);
+- (CGFloat)cornerRadius{
+    return  [objc_getAssociatedObject(self, _cmd) floatValue];
 }
 
-- (void)setFrame_x:(CGFloat)x{
-    CGRect frame = self.frame;
-    frame.origin.x = x;
-    self.frame = frame;
+- (void)setBorderColor:(UIColor *)borderColor{
+    objc_setAssociatedObject(self, @selector(borderColor), borderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    //设置边框颜色
+    self.layer.borderColor = borderColor.CGColor;
+    self.layer.borderWidth = 1;
 }
-- (void)setFrame_y:(CGFloat)y{
-    CGRect frame = self.frame;
-    frame.origin.y = y;
-    self.frame = frame;
-}
-- (void)setFrame_width:(CGFloat)width{
-    CGRect frame = self.frame;
-    frame.size.width = width;
-    self.frame = frame;
-}
-- (void)setFrame_height:(CGFloat)height{
-    CGRect frame = self.frame;
-    frame.size.height = height;
-    self.frame = frame;
+- (UIColor *)borderColor{
+    return objc_getAssociatedObject(self, _cmd);
 }
 
 #pragma mark 布局操作器获取方法
@@ -119,9 +103,9 @@
     objc_setAssociatedObject(self, @selector(heightConstraint), heightConstraint, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIView *(^)(CGFloat))topToSuper{
+- (UIView *(^)(CGFloat constant))topToSuper{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(CGFloat) = ^(CGFloat constant){
+    UIView *(^block)(CGFloat constant) = ^(CGFloat constant){
         [weakSelf setLastConstraint:[weakSelf setLayoutTopFromSuperViewWithConstant:constant]];
         return weakSelf;
     };
@@ -274,37 +258,55 @@
     return block;
 }
 
-- (UIView *(^)(CGFloat))centerXtoSuper{
+- (UIView *(^)(CGFloat, CGFloat))widthToHeight {
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview constant:constant]];
+    UIView *(^block)(CGFloat, CGFloat) = ^(CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutWidthToHeightWithMultiplier:m constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(CGFloat))centerYtoSuper{
+- (UIView *(^)(CGFloat, CGFloat))heightToWidth {
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(CGFloat) = ^(CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview constant:constant]];
+    UIView *(^block)(CGFloat, CGFloat) = ^(CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutHeightToWidthWithMultiplier:m constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat))centerXto{
+- (UIView *(^)(CGFloat, CGFloat))centerXtoSuper{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *,CGFloat) = ^(UIView *targetView, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:targetView constant:c]];
+    UIView *(^block)(CGFloat, CGFloat) = ^(CGFloat multplier, CGFloat constant){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview multiplier:multplier constant:constant]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat))centerYto{
+- (UIView *(^)(CGFloat, CGFloat))centerYtoSuper{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:targetView constant:c]];
+    UIView *(^block)(CGFloat, CGFloat) = ^(CGFloat multplier, CGFloat constant){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview multiplier:multplier constant:constant]];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)(UIView *, CGFloat, CGFloat))centerXto{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)(UIView *,CGFloat,CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:targetView multiplier:m constant:c]];
+        return weakSelf;
+    };
+    return block;
+}
+
+- (UIView *(^)(UIView *,CGFloat, CGFloat))centerYto{
+    __weak typeof(self) weakSelf = self;
+    UIView *(^block)(UIView *,CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:targetView multiplier:m constant:c]];
         return weakSelf;
     };
     return block;
@@ -516,6 +518,23 @@
     return constraint;
 }
 
+- (NSLayoutConstraint *)setLayoutWidthToHeightWithMultiplier:(CGFloat)multiplier constant:(CGFloat)c{
+    NSLayoutConstraint *constraint;
+    if (self.superview != nil) {
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:multiplier constant:c];
+        [self.superview addConstraint:constraint];
+    }
+    return constraint;
+}
+- (NSLayoutConstraint *)setLayoutHeightToWidthWithMultiplier:(CGFloat)multiplier constant:(CGFloat)c{
+    NSLayoutConstraint *constraint;
+    if (self.superview != nil) {
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:multiplier constant:c];
+        [self.superview addConstraint:constraint];
+    }
+    return constraint;
+}
+
 - (NSLayoutConstraint *)setLayoutWidth:(UIView *)targetView multiplier:(CGFloat)multiplier constant:(CGFloat)c{
     NSLayoutConstraint *constraint;
     if (self.superview != nil) {
@@ -552,19 +571,19 @@
     return constraint;
 }
 
-- (NSLayoutConstraint *)setLayoutCenterX:(UIView *)targetView constant:(CGFloat)c{
+- (NSLayoutConstraint *)setLayoutCenterX:(UIView *)targetView multiplier:(CGFloat)m constant:(CGFloat)c{
     NSLayoutConstraint *constraint;
     if (self.superview != nil) {
-        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:c];
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeCenterX multiplier:m constant:c];
         [self.superview addConstraint:constraint];
     }
     return constraint;
 }
 
-- (NSLayoutConstraint *)setLayoutCenterY:(UIView *)targetView  constant:(CGFloat)c{
+- (NSLayoutConstraint *)setLayoutCenterY:(UIView *)targetView  multiplier:(CGFloat)m   constant:(CGFloat)c{
     NSLayoutConstraint *constraint;
     if (self.superview != nil) {
-        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:c];
+        constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:targetView attribute:NSLayoutAttributeCenterY multiplier:m constant:c];
         [self.superview addConstraint:constraint];
     }
     return constraint;
@@ -574,7 +593,7 @@
 
 - (void)shiPeiAllSubViewsUsingLayout{//全部适配(自己的宽高约束、和其他控件间的约束)
     [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.constant = SHIPEI(obj.constant);
+        [obj setAdapterScreen:YES];
     }];
     
     [self shiPeiSubViewUsingLayout:self];
@@ -588,9 +607,8 @@
 
 - (void)shiPeiAllSubView_X_W_UsingLayout{//水平适配
     [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(obj.firstItem == self)
         if((obj.firstAttribute == NSLayoutAttributeLeft) || obj.firstAttribute == NSLayoutAttributeRight || obj.firstAttribute == NSLayoutAttributeLeading || obj.firstAttribute == NSLayoutAttributeTrailing || obj.firstAttribute == NSLayoutAttributeWidth || obj.firstAttribute == NSLayoutAttributeCenterX){
-            obj.constant = SHIPEI(obj.constant);
+            [obj setAdapterScreen:YES];
         }
     }];
     
@@ -606,7 +624,7 @@
 - (void)shiPeiAllSubView_Y_H_UsingLayout{//竖直适配
     [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if(obj.firstAttribute == NSLayoutAttributeTop || obj.firstAttribute == NSLayoutAttributeBottom || obj.firstAttribute == NSLayoutAttributeHeight || obj.firstAttribute == NSLayoutAttributeCenterY){
-            obj.constant = SHIPEI(obj.constant);
+            [obj setAdapterScreen:YES];
         }
     }];
     
@@ -655,4 +673,94 @@
         [weakSelf shiPeiSubView_X_W:obj];
     }];
 }
+
+
+
+
+
+
+#pragma mark - <************************** xib中进行字体大小、水平竖直方向约束适配 **************************>
+#pragma mark - 全部适配
+- (void)setAdapterFont:(BOOL)adapterFont{
+    objc_setAssociatedObject(self, @selector(adapterFont), [NSNumber numberWithBool:adapterFont], OBJC_ASSOCIATION_RETAIN);
+    if(adapterFont){
+        if ([self isKindOfClass:[UILabel class]]) {
+            UILabel * label = (UILabel *)self;
+            CGFloat fontSize = label.font.pointSize;
+            //创建一个新的字体相同当前字体除了指定的大小
+            label.font = [label.font fontWithSize:SHIPEI(fontSize)];
+        }
+        if ([self isKindOfClass:[UIButton class]]) {
+            UIButton * button = (UIButton *)self;
+            CGFloat fontSize = button.titleLabel.font.pointSize;
+            //创建一个新的字体相同当前字体除了指定的大小
+            button.titleLabel.font = [button.titleLabel.font fontWithSize:SHIPEI(fontSize)];
+        }
+    }
+}
+- (BOOL)adapterFont{
+    BOOL adapterFont = [objc_getAssociatedObject(self, _cmd) boolValue];
+    return adapterFont;
+}
+#pragma mark - 全部适配
+- (void)setAdapterHVConstraints:(BOOL)adapterHVConstraints{
+    objc_setAssociatedObject(self, @selector(adapterHVConstraints), [NSNumber numberWithBool:adapterHVConstraints], OBJC_ASSOCIATION_RETAIN);
+    if(adapterHVConstraints){
+        self.shipeiAllSubViewsUsinglayout();
+    }
+}
+- (BOOL)adapterHVConstraints{
+    BOOL adapterHVConstraints = [objc_getAssociatedObject(self, _cmd) boolValue];
+    return adapterHVConstraints;
+}
+#pragma mark - 水平适配
+- (void)setAdapterHConstraints:(BOOL)adapterHConstraints{
+    if (self.adapterHConstraints) {
+        return;
+    }
+    objc_setAssociatedObject(self, @selector(adapterHConstraints), [NSNumber numberWithBool:adapterHConstraints], OBJC_ASSOCIATION_RETAIN);
+    if(adapterHConstraints){
+        self.shiPeiAllSubViews_X_W_UsingLayout();
+    }
+}
+- (BOOL)adapterHConstraints{
+    BOOL adapterHConstraints = [objc_getAssociatedObject(self, _cmd) boolValue];
+    return adapterHConstraints;
+}
+
+#pragma mark - 竖直适配
+- (void)setAdapterVConstraints:(BOOL)adapterVConstraints{
+    if (self.adapterVConstraints) {
+        return;
+    }
+    objc_setAssociatedObject(self, @selector(adapterVConstraints), [NSNumber numberWithBool:adapterVConstraints], OBJC_ASSOCIATION_RETAIN);
+    if(adapterVConstraints){
+        self.shiPeiAllSubViews_Y_H_UsingLayout();
+    }
+}
+- (BOOL)adapterVConstraints{
+    BOOL adapterVConstraints = [objc_getAssociatedObject(self, _cmd) boolValue];
+    return adapterVConstraints;
+}
 @end
+
+
+#pragma mark - <************************** xib中进行单个约束适配 **************************>
+@implementation NSLayoutConstraint (IBDesignable)
+-  (void)setAdapterScreen:(BOOL)adapterScreen{
+    objc_setAssociatedObject(self, @selector(adapterScreen), [NSNumber numberWithBool:adapterScreen], OBJC_ASSOCIATION_RETAIN);
+    if(adapterScreen){
+        self.constant =  SHIPEI(self.constant);
+    }
+}
+-  (BOOL)adapterScreen{
+    BOOL adapterScreen = [objc_getAssociatedObject(self, _cmd) boolValue];
+    return adapterScreen;
+}
+
+@end
+
+
+
+
+

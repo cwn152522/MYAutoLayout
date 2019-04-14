@@ -14,10 +14,8 @@
  *  引入链式编程思想，进一步简化autolayout代码
  *
  * @note  关于constant符号说明：
- *
  *             (1)所有方法传入的constant均传正数即可，部分方法内部需使用负数时会自动转换。
  *             (2)当外界需对某个约束进行更新时(改变约束的constant)，这时候就得注意正负值了。
- *             (3)constant正负取决于参照视图和自身的位置关系，比如:a.right = b.left + constant，这个约束表示a的右边距离b的左边constant处。如果你希望a和b间关系是相离，那么constant得为负数，因为如果是正数的话a和b就相交了。
  *
  *
  *
@@ -25,13 +23,6 @@
  *  @author 陈伟南, 17-04-28 13:58:34
  *
  *  新增frame布局的适配方法，目前提供相对父布局的便捷适配
- *
- *
- *
- *
- *  @author 陈伟南, 17-06-30 11:21:55
- *
- *  新增frame属性便捷设置
  *
  *
  *
@@ -47,22 +38,26 @@
  *
  *  1.支持相对对齐约束leftToLeft、rightToRight等的设置
  *  2.支持约束重建，使用cwn_reMakeConstraints获取操作器即可
- *  3.支持全部约束适配、水平、竖直方向约束单独适配
+ *  3.支持在代码中进行全部约束适配、水平、竖直方向约束单独适配
  *  4.支持控件width、height约束的快速获取，可以定位xib中的对应约束，进行修改
  *  5.支持相对父视图top、bottom、right、left的约束快速创建：edgeInsetsToSuper
+ *
+ *
+ *
+ *
+ * @author 陈伟南,19-04-15
+ *
+ * 1.支持在xib中进行单个约束的适配
+ * 2.支持在xib中进行视图的相关适配
+ * 3.支持在xib中进行字体的适配
  */
 
 
-
+IB_DESIGNABLE
 @interface UIView (CWNView)
 
-#pragma mark Frame属性访问
-
-@property (assign, nonatomic) CGFloat frame_x;//相当于frame.origin.x
-@property (assign, nonatomic) CGFloat frame_y;//相当于frame.origin.y
-@property (assign, nonatomic) CGFloat frame_width;//相当于frame.size.width
-@property (assign, nonatomic) CGFloat frame_height;//相当于frame.size.height
-
+@property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
+@property (nonatomic, strong) IBInspectable UIColor *borderColor;
 
 #pragma mark 布局操作器获取方法，在block里调用具体布局方法进行布局
 
@@ -104,56 +99,122 @@
 @property (strong, nonatomic) NSLayoutConstraint *heightConstraint;
 
 
+
+
+
+
+
+
+
+
 /**
- *  控件相对父视图约束设置方法
- *
- * @ param constant  上下左右相对父视图的距离
+ 当前视图top相对父视图的top，参数为(constant)
  */
 - (UIView *(^)(CGFloat constant))topToSuper;
+/**
+ 当前视图left相对父视图的left，参数为(constant)
+ */
 - (UIView *(^)(CGFloat constant))leftToSuper;
+/**
+ 当前视图right相对父视图的right，参数为(constant)
+ */
 - (UIView *(^)(CGFloat constant))rightToSuper;
+/**
+ 当前视图bottom相对父视图的bottom，参数为(constant)
+ */
 - (UIView *(^)(CGFloat constant))bottomToSuper;
+/**
+ 当前视图edgeInsets相对父视图的edgeInsets，参数为(UIEdgeInsets)
+ */
 - (void(^)(UIEdgeInsets edgeInsets))edgeInsetsToSuper;
 
+
 /**
- *  控件间相对约束设置方法
- *
- * @ param targetView    参照视图
- * @ param multiplier   比例
- * @ param constant      常数
- * @ note   setLayoutLeft:方法相对的是参照视图的Right，其他方法同理
+ 当前视图top相对targetView的bottom，参数为(targetView, multiplier, constant)
  */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topTo;
+/**
+ 当前视图top相对targetView的top，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topToTop;
+/**
+ 当前视图left相对targetView的right，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))leftTo;
+/**
+ 当前视图left相对targetView的left，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))leftToLeft;
+/**
+ 当前视图right相对targetView的left，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))rightTo;
+/**
+ 当前视图right相对targetView的right，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))rightToRight;
+/**
+ 当前视图bottom相对targetView的top，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))bottomTo;
+/**
+ 当前视图bottom相对targetView的bottom，参数为(targetView, multiplier, constant)
+ */
 - (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))bottomToBottom;
 
-/**
- *  控件宽高的约束设置方法
- *
- * @ param targetView     参照视图
- * @ param multiplier   比例
- * @ param constant    常数
- */
-- (UIView *(^)(CGFloat constant))width;
-- (UIView *(^)(CGFloat constant))height;
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))widthTo;
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))heightTo;
 
 /**
- *  控件中心对齐约束设置方法
- *
- * @ param targetView    参照视图
- * @ param constant   常数
+ 当前视图width，参数为(constant)
  */
-- (UIView *(^)(CGFloat constant))centerXtoSuper;
-- (UIView *(^)(CGFloat constant))centerYtoSuper;
-- (UIView *(^)(UIView *targetView, CGFloat constant))centerXto;
-- (UIView *(^)(UIView *targetView, CGFloat constant))centerYto;
+- (UIView *(^)(CGFloat constant))width;
+/**
+ 当前视图height，参数为(constant)
+ */
+- (UIView *(^)(CGFloat constant))height;
+/**
+ 当前视图width相对于targetView的width，参数为(targetView, multiplier, constant)
+ */
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))widthTo;
+/**
+ 当前视图height相对于targetView的height，参数为(targetView, multiplier, constant)
+ */
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))heightTo;
+/**
+ 当前视图width相对于targetView的height，参数为(targetView, multiplier, constant)
+ */
+- (UIView *(^)(CGFloat multiplier, CGFloat constant))widthToHeight;
+/**
+ 当前视图height相对于targetView的width，参数为(targetView, multiplier, constant)
+ */
+- (UIView *(^)(CGFloat multiplier, CGFloat constant))heightToWidth;
+
+
+/**
+ 当前视图centerX相对于父视图的centerX，参数为(multiplier, constant)
+ */
+- (UIView *(^)(CGFloat multiplier, CGFloat constant))centerXtoSuper;
+/**
+ 当前视图centerY相对于父视图的centerY，参数为(multiplier, constant)
+ */
+- (UIView *(^)(CGFloat multiplier, CGFloat constant))centerYtoSuper;
+/**
+ 当前视图centerX相对于targetView的centerX，参数为(targetView, multiplier, constant)
+ */
+- (UIView *(^)(UIView *targetView, CGFloat multiplier,  CGFloat constant))centerXto;
+/**
+ 当前视图centerY相对于targetView的centerY，参数为(targetView, multiplier, constant)
+ */
+- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))centerYto;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -187,4 +248,23 @@
 - (UIView *(^)())shiPeiAllSubViews;
 - (UIView *(^)())shiPeiAllSubViews_XW;
 
+
+
+
+
+
+
+#pragma mark - <************************** xib中进行字体大小、水平竖直方向约束适配 **************************>
+//xib字体大小适配
+@property(assign, nonatomic) IBInspectable BOOL adapterFont;//字体大小适配
+//xib约束适配
+@property(assign, nonatomic) IBInspectable BOOL adapterHConstraints;//水平方向所有约束适配
+@property(assign, nonatomic) IBInspectable BOOL adapterVConstraints;//竖直方向所有约束适配
+@property(assign, nonatomic) IBInspectable BOOL adapterHVConstraints;//相当于adapterHScreen+adapterVScreen
+@end
+
+#pragma mark - <************************** xib中进行单个约束适配 **************************>
+@interface NSLayoutConstraint (IBDesignable)
+//单个约束适配
+@property(assign, nonatomic) IBInspectable BOOL adapterScreen;//单个约束的适配
 @end

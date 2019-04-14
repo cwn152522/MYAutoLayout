@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -27,10 +25,10 @@
                                 <rect key="frame" x="60" y="224" width="200" height="120"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JUV-zd-hNE">
-                                        <rect key="frame" x="14" y="15" width="66" height="57"/>
+                                        <rect key="frame" x="14" y="15" width="66.5" height="57"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uj1-eZ-TTK">
-                                                <rect key="frame" x="23" y="23" width="19" height="11"/>
+                                                <rect key="frame" x="24" y="23" width="18.5" height="11"/>
                                                 <color key="backgroundColor" red="0.95963541669999997" green="0.77756076389999995" blue="0.37068684899999998" alpha="1" colorSpace="calibratedRGB"/>
                                             </view>
                                         </subviews>
@@ -44,10 +42,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z8a-qT-pLV">
-                                        <rect key="frame" x="126" y="56" width="66" height="57"/>
+                                        <rect key="frame" x="125.5" y="56" width="66.5" height="57"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5OB-H7-3V8">
-                                                <rect key="frame" x="24" y="23" width="19" height="11"/>
+                                                <rect key="frame" x="24" y="23" width="18.5" height="11"/>
                                                 <color key="backgroundColor" red="0.95963541669999997" green="0.77756076389999995" blue="0.37068684899999998" alpha="1" colorSpace="calibratedRGB"/>
                                             </view>
                                         </subviews>
@@ -58,7 +56,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w7y-Wn-MpC">
-                                        <rect key="frame" x="62" y="45" width="77" height="30"/>
+                                        <rect key="frame" x="61.5" y="45" width="77" height="30"/>
                                         <state key="normal" title="位于正中央"/>
                                     </button>
                                 </subviews>
@@ -93,7 +91,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="164.0625" y="163.20422535211267"/>
+            <point key="canvasLocation" x="163.125" y="162.67605633802816"/>
         </scene>
     </scenes>
 </document>
