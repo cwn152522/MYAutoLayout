@@ -31,7 +31,7 @@
     //重新做xib中的控件约束
     [self.centerbtn cwn_reMakeConstraints:^(UIView *maker) {
         maker.centerXtoSuper(1, 0).topToSuper(5);
-//        maker.edgeInsetsToSuper(UIEdgeInsetsMake(50, 50, 50, 50));
+//        maker.edgeInsetsToSuper(U3IEdgeInsetsMake(50, 50, 50, 50));
     }];
     NSLog(@"本来中心对齐的，变成距顶部5");
     

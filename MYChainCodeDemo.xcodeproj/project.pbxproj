@@ -225,7 +225,7 @@
 				TargetAttributes = {
 					BE431EA41E9C64D6002A688A = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = P6247WX9N5;
+						DevelopmentTeam = 96KT2V2ANX;
 						ProvisioningStyle = Automatic;
 					};
 					BE431EBD1E9C64D6002A688A = {
@@ -247,6 +247,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -447,7 +448,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = P6247WX9N5;
+				DEVELOPMENT_TEAM = 96KT2V2ANX;
 				INFOPLIST_FILE = MYChainCodeDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shiDaiWangLou.MYChainCodeDemo;
@@ -459,7 +460,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = P6247WX9N5;
+				DEVELOPMENT_TEAM = 96KT2V2ANX;
 				INFOPLIST_FILE = MYChainCodeDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shiDaiWangLou.MYChainCodeDemo;
