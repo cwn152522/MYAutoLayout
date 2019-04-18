@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#define SHIPEI(a)  [UIScreen mainScreen].bounds.size.width/375.0*a
 /**
  *  @author 陈伟南, 17-04-11 22:05:55
  *
@@ -130,47 +130,47 @@ IB_DESIGNABLE
 
 
 /**
- 当前视图top相对targetView的bottom，参数为(targetView, multiplier, constant)
+ 当前视图top相对targetView的bottom，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topTo;
+- (UIView *(^)(UIView *targetView, CGFloat constant))topTo;
 /**
- 当前视图top相对targetView的top，参数为(targetView, multiplier, constant)
+ 当前视图top相对targetView的top，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topToTop;
+- (UIView *(^)(UIView *targetView, CGFloat constant))topToTop;
 /**
- 当前视图left相对targetView的right，参数为(targetView, multiplier, constant)
+ 当前视图left相对targetView的right，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))leftTo;
+- (UIView *(^)(UIView *targetView, CGFloat constant))leftTo;
 /**
- 当前视图left相对targetView的left，参数为(targetView, multiplier, constant)
+ 当前视图left相对targetView的left，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))leftToLeft;
+- (UIView *(^)(UIView *targetView, CGFloat constant))leftToLeft;
 /**
- 当前视图right相对targetView的left，参数为(targetView, multiplier, constant)
+ 当前视图right相对targetView的left，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))rightTo;
+- (UIView *(^)(UIView *targetView, CGFloat constant))rightTo;
 /**
- 当前视图right相对targetView的right，参数为(targetView, multiplier, constant)
+ 当前视图right相对targetView的right，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))rightToRight;
+- (UIView *(^)(UIView *targetView, CGFloat constant))rightToRight;
 /**
- 当前视图bottom相对targetView的top，参数为(targetView, multiplier, constant)
+ 当前视图bottom相对targetView的top，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))bottomTo;
+- (UIView *(^)(UIView *targetView, CGFloat constant))bottomTo;
 /**
- 当前视图bottom相对targetView的bottom，参数为(targetView, multiplier, constant)
+ 当前视图bottom相对targetView的bottom，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))bottomToBottom;
+- (UIView *(^)(UIView *targetView, CGFloat constant))bottomToBottom;
 
 
 /**
  当前视图width，参数为(constant)
  */
-- (UIView *(^)(CGFloat constant))width;
+- (UIView *(^)(CGFloat constant))widthValue;
 /**
  当前视图height，参数为(constant)
  */
-- (UIView *(^)(CGFloat constant))height;
+- (UIView *(^)(CGFloat constant))heightValue;
 /**
  当前视图width相对于targetView的width，参数为(targetView, multiplier, constant)
  */
@@ -190,21 +190,21 @@ IB_DESIGNABLE
 
 
 /**
- 当前视图centerX相对于父视图的centerX，参数为(multiplier, constant)
+ 当前视图centerX相对于父视图的centerX，参数为(constant)
  */
-- (UIView *(^)(CGFloat multiplier, CGFloat constant))centerXtoSuper;
+- (UIView *(^)(CGFloat constant))centerXtoSuper;
 /**
- 当前视图centerY相对于父视图的centerY，参数为(multiplier, constant)
+ 当前视图centerY相对于父视图的centerY，参数为(constant)
  */
-- (UIView *(^)(CGFloat multiplier, CGFloat constant))centerYtoSuper;
+- (UIView *(^)(CGFloat constant))centerYtoSuper;
 /**
- 当前视图centerX相对于targetView的centerX，参数为(targetView, multiplier, constant)
+ 当前视图centerX相对于targetView的centerX，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier,  CGFloat constant))centerXto;
+- (UIView *(^)(UIView *targetView,  CGFloat constant))centerXto;
 /**
- 当前视图centerY相对于targetView的centerY，参数为(targetView, multiplier, constant)
+ 当前视图centerY相对于targetView的centerY，参数为(targetView, constant)
  */
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))centerYto;
+- (UIView *(^)(UIView *targetView, CGFloat constant))centerYto;
 
 
 

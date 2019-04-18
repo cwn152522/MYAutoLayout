@@ -9,8 +9,6 @@
 #import "UIView+CWNView.h"
 #import <objc/runtime.h>
 
-#define SHIPEI(a)  [UIScreen mainScreen].bounds.size.width/375.0*a
-
 @implementation UIView (CWNView)
 
 - (void)setCornerRadius:(CGFloat)cornerRadius{
@@ -150,79 +148,79 @@
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))topTo{
+- (UIView *(^)(UIView *, CGFloat))topTo{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutTop:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutTop:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *targetView, CGFloat multiplier, CGFloat constant))topToTop{
+- (UIView *(^)(UIView *targetView, CGFloat constant))topToTop{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *targetView, CGFloat multiplier, CGFloat constant) = ^(UIView *targetView, CGFloat multiplier, CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutTopToTop:targetView multiplier:multiplier constant:constant]];
+    UIView *(^block)(UIView *targetView, CGFloat constant) = ^(UIView *targetView, CGFloat constant){
+        [weakSelf setLastConstraint:[weakSelf setLayoutTopToTop:targetView multiplier:1 constant:constant]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))leftTo{
+- (UIView *(^)(UIView *, CGFloat))leftTo{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutLeft:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutLeft:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))leftToLeft{
+- (UIView *(^)(UIView *, CGFloat))leftToLeft{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutLeftToLeft:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutLeftToLeft:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))bottomTo{
+- (UIView *(^)(UIView *, CGFloat))bottomTo{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutBottom:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutBottom:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))bottomToBottom{
+- (UIView *(^)(UIView *, CGFloat))bottomToBottom{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutBottomToBottom:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutBottomToBottom:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))rightTo{
+- (UIView *(^)(UIView *, CGFloat))rightTo{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutRight:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutRight:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))rightToRight{
+- (UIView *(^)(UIView *, CGFloat))rightToRight{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *, CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutRightToRight:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutRightToRight:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(CGFloat))width{
+- (UIView *(^)(CGFloat))widthValue{
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
         [weakSelf setLastConstraint:[weakSelf setLayoutWidth:constant]];
@@ -231,7 +229,7 @@
     return block;
 }
 
-- (UIView *(^)(CGFloat))height{
+- (UIView *(^)(CGFloat))heightValue{
     __weak typeof(self) weakSelf = self;
     UIView *(^block)(CGFloat) = ^(CGFloat constant){
         [weakSelf setLastConstraint:[weakSelf setLayoutHeight:constant]];
@@ -276,37 +274,37 @@
     return block;
 }
 
-- (UIView *(^)(CGFloat, CGFloat))centerXtoSuper{
+- (UIView *(^)(CGFloat))centerXtoSuper{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(CGFloat, CGFloat) = ^(CGFloat multplier, CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview multiplier:multplier constant:constant]];
+    UIView *(^block)(CGFloat) = ^(CGFloat constant){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:weakSelf.superview multiplier:1 constant:constant]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(CGFloat, CGFloat))centerYtoSuper{
+- (UIView *(^)(CGFloat))centerYtoSuper{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(CGFloat, CGFloat) = ^(CGFloat multplier, CGFloat constant){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview multiplier:multplier constant:constant]];
+    UIView *(^block)(CGFloat) = ^(CGFloat constant){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:weakSelf.superview multiplier:1 constant:constant]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *, CGFloat, CGFloat))centerXto{
+- (UIView *(^)(UIView *, CGFloat))centerXto{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *,CGFloat,CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *,CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterX:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
 }
 
-- (UIView *(^)(UIView *,CGFloat, CGFloat))centerYto{
+- (UIView *(^)(UIView *, CGFloat))centerYto{
     __weak typeof(self) weakSelf = self;
-    UIView *(^block)(UIView *,CGFloat, CGFloat) = ^(UIView *targetView, CGFloat m, CGFloat c){
-        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:targetView multiplier:m constant:c]];
+    UIView *(^block)(UIView *, CGFloat) = ^(UIView *targetView, CGFloat c){
+        [weakSelf setLastConstraint:[weakSelf setLayoutCenterY:targetView multiplier:1 constant:c]];
         return weakSelf;
     };
     return block;
@@ -695,6 +693,12 @@
             CGFloat fontSize = button.titleLabel.font.pointSize;
             //创建一个新的字体相同当前字体除了指定的大小
             button.titleLabel.font = [button.titleLabel.font fontWithSize:SHIPEI(fontSize)];
+        }
+        if ([self isKindOfClass:[UITextField class]]) {
+            UITextField * button = (UITextField *)self;
+            CGFloat fontSize = button.font.pointSize;
+            //创建一个新的字体相同当前字体除了指定的大小
+            button.font = [button.font fontWithSize:SHIPEI(fontSize)];
         }
     }
 }
